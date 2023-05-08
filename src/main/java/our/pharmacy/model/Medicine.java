@@ -1,8 +1,11 @@
 package our.pharmacy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "medicine")
@@ -17,6 +20,9 @@ public class Medicine {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "is_manufacturing", nullable = false)
+    private Boolean isManufacturing;
+
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -26,6 +32,14 @@ public class Medicine {
     @ManyToOne
     @JoinColumn(name = "medicine_type_id", nullable = false)
     private MedicineType medicineType;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn(name="id")
+    private MedicineDerived derived;
+
+    @OneToMany(mappedBy = "medicine")
+    @JsonIgnore
+    private List<MedicineItem> items;
 
     public Long getId() {
         return id;
@@ -73,5 +87,29 @@ public class Medicine {
 
     public void setMedicineType(MedicineType medicineType) {
         this.medicineType = medicineType;
+    }
+
+    public List<MedicineItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<MedicineItem> items) {
+        this.items = items;
+    }
+
+    public MedicineDerived getDerived() {
+        return derived;
+    }
+
+    public void setDerived(MedicineDerived derived) {
+        this.derived = derived;
+    }
+
+    public Boolean getIsManufacturing() {
+        return isManufacturing;
+    }
+
+    public void setIsManufacturing(Boolean manufacturing) {
+        isManufacturing = manufacturing;
     }
 }

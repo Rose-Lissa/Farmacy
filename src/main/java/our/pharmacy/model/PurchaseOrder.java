@@ -2,6 +2,9 @@ package our.pharmacy.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "purchase_order")
 public class PurchaseOrder {
@@ -17,6 +20,13 @@ public class PurchaseOrder {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<MedicineItem> medicineItems = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -40,5 +50,21 @@ public class PurchaseOrder {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<ShoppingCartItem> getShoppingCartItems() {
+        return shoppingCartItems;
+    }
+
+    public void setShoppingCartItems(List<ShoppingCartItem> shoppingCartItems) {
+        this.shoppingCartItems = shoppingCartItems;
+    }
+
+    public List<MedicineItem> getMedicineItems() {
+        return medicineItems;
+    }
+
+    public void setMedicineItems(List<MedicineItem> medicineItems) {
+        this.medicineItems = medicineItems;
     }
 }

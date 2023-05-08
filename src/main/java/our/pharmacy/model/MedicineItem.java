@@ -1,6 +1,8 @@
 package our.pharmacy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 @Entity
 @Table(name = "medicine_item")
@@ -15,6 +17,7 @@ public class MedicineItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_order_id")
+    @JsonIgnore
     private PurchaseOrder purchaseOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,6 +26,10 @@ public class MedicineItem {
 
     @Column(name = "sales", nullable = false)
     private boolean sales;
+
+    public boolean isLiberty() {
+        return !sales && purchaseOrder == null;
+    }
 
     public Long getId() {
         return id;

@@ -23,6 +23,9 @@ public class ManufacturingOrder {
     @Column(name = "number", nullable = false)
     private Integer number;
 
+    @Column(name = "is_ready")
+    private boolean isReady;
+
     public Long getId() {
         return id;
     }
@@ -53,5 +56,13 @@ public class ManufacturingOrder {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
     }
 }

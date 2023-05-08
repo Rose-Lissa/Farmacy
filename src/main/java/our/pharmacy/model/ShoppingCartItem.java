@@ -1,10 +1,11 @@
 package our.pharmacy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "external_order")
-public class ExternalOrder {
+@Table(name = "shopping_cart_medicine")
+public class ShoppingCartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,21 +13,19 @@ public class ExternalOrder {
 
     @ManyToOne
     @JoinColumn(name = "purchase_order_id")
+    @JsonIgnore
     private PurchaseOrder purchaseOrder;
 
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
-
     @Column(nullable = false)
     private int number;
 
-    @Column(name = "is_ready")
-    private boolean isReady;
+    @OneToOne
+    @PrimaryKeyJoinColumn(name="id")
+    private ShoppingCartItemDerived derived;
 
     public Long getId() {
         return id;
@@ -52,14 +51,6 @@ public class ExternalOrder {
         this.medicine = medicine;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
     public int getNumber() {
         return number;
     }
@@ -68,11 +59,11 @@ public class ExternalOrder {
         this.number = number;
     }
 
-    public boolean isReady() {
-        return isReady;
+    public ShoppingCartItemDerived getDerived() {
+        return derived;
     }
 
-    public void setReady(boolean ready) {
-        isReady = ready;
+    public void setDerived(ShoppingCartItemDerived derived) {
+        this.derived = derived;
     }
 }

@@ -1,29 +1,30 @@
-create table medicine
-(
-    id                       bigint primary key,
-    "name"                   varchar not null,
-    price                    numeric not null,
-    description              text    not null,
-    manufacturing_technology text,
-    medicine_type            varchar not null
-);
-
 create table medicine_types
 (
     id     bigint primary key,
     "name" varchar not null
 );
 
+create table medicine
+(
+    id                       bigserial primary key,
+    "name"                   varchar not null,
+    price                    numeric not null,
+    is_manufacturing         boolean not null,
+    description              text,
+    manufacturing_technology text,
+    medicine_type_id         bigint references medicine_types
+);
+
 create table users
 (
-    id         bigint primary key,
+    id         bigserial primary key,
     username   varchar not null unique,
     "password" varchar not null
 );
 
 create table worker
 (
-    id         bigint primary key references users,
+    id         bigserial primary key references users,
     "name"     varchar not null,
     surname    varchar not null,
     patronymic varchar not null,
@@ -32,7 +33,7 @@ create table worker
 
 create table consumer
 (
-    id         bigint primary key references users,
+    id         bigserial primary key references users,
     "name"     varchar not null,
     surname    varchar not null,
     patronymic varchar not null,
@@ -42,19 +43,19 @@ create table consumer
 
 create table "admin"
 (
-    id bigint primary key references users
+    id bigserial primary key references users
 );
 
 create table purchase_order
 (
-    id      bigint primary key,
+    id      bigserial primary key,
     stage   varchar not null,
     user_id bigint references users
 );
 
 create table medicine_item
 (
-    id                bigint primary key,
+    id                bigserial primary key,
     serial_number     varchar not null unique,
     purchase_order_id bigint references purchase_order,
     medicine_id       bigint references medicine,
@@ -64,7 +65,7 @@ create table medicine_item
 
 create table manufacturing_order
 (
-    id                bigint primary key,
+    id                bigserial primary key,
     purchase_order_id bigint references purchase_order,
     medicine_id       bigint references medicine,
     number            int not null check ( number > 0 )
@@ -72,14 +73,14 @@ create table manufacturing_order
 
 create table supplier
 (
-    id     bigint primary key,
+    id     bigserial primary key,
     "name" varchar not null
 );
 
 
 create table external_order
 (
-    id                bigint primary key,
+    id                bigserial primary key,
     purchase_order_id bigint references purchase_order,
     medicine_id       bigint references medicine,
     supplier_id       bigint references supplier,
@@ -89,11 +90,9 @@ create table external_order
 
 create table shopping_cart_medicine
 (
-    id                bigint primary key,
+    id                bigserial primary key,
     purchase_order_id bigint references purchase_order,
     medicine_id       bigint references medicine,
     number            int not null check ( number > 0 )
 );
-
-
 
